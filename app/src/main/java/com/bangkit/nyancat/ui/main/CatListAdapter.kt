@@ -24,8 +24,9 @@ class CatListAdapter(private val context: Context, private val listCat: List<Sea
         val imageUrl = "https://cdn2.thecatapi.com/images/" + currentData.referenceImageId + ".jpg"
         Glide.with(context)
             .load(imageUrl)
+            .placeholder(R.drawable.cat_silhoutte)
             .into(viewHolder.image)
-        viewHolder.tvUsername.text = listCat[position].name
+        viewHolder.tvCatName.text = listCat[position].name
         viewHolder.itemView.setOnClickListener {
             onItemClickCallback.onItemClicked(listCat[position])}
     }
@@ -34,7 +35,7 @@ class CatListAdapter(private val context: Context, private val listCat: List<Sea
     
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.imageViewCatCard)
-        val tvUsername: TextView = view.findViewById(R.id.tvCatCard)
+        val tvCatName: TextView = view.findViewById(R.id.tvCatCard)
     }
     
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
