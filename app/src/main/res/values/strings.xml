@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">NyanCat</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="menu_favourite_list">Favourite List</string>
+    <string name="menu_change_theme">Change Theme</string>
+    <string name="queryHint">Enter cat name ...</string>
+    <string name="cat_picture">Cat Picture</string>
+    <string name="cat_name">Cat Name</string>
 </resources>
