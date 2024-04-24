@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Cat::class], version = 1)
+@Database(entities = [Cat::class], version = 2)
 abstract class CatDatabase: RoomDatabase() {
     abstract fun catDao(): CatDao
 

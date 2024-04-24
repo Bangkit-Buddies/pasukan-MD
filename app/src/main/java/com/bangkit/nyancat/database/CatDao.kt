@@ -17,6 +17,6 @@ interface CatDao {
     @Query("SELECT count(*) FROM favorite_cat WHERE favorite_cat.id = :id")
     suspend fun checkUser(id: Int): Int
 
-    @Query("DELETE FROM favorite_cat WHERE favorite_user.id = :id")
-    suspend fun deleteFavoriteUser(id: Int): Int
+    @Query("DELETE FROM favorite_cat WHERE favorite_cat.id = :id")
+    suspend fun deleteFavoriteCat(id: Int): Int
 }

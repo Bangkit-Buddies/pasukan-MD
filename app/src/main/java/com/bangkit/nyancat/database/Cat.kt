@@ -6,6 +6,8 @@ import java.io.Serializable
 
 @Entity(tableName = "favorite_cat")
 data class Cat (
+    val name: String,
+
     @PrimaryKey
     val id: String,
 

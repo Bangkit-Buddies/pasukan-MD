@@ -3,6 +3,7 @@ package com.bangkit.nyancat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.bangkit.nyancat.preferences.SettingPreferences
+import com.bangkit.nyancat.ui.settings.SettingsViewModel
 
 class ViewModelFactory(private val pref: SettingPreferences) : ViewModelProvider.NewInstanceFactory() {
 
