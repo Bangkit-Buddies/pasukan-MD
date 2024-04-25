@@ -61,6 +61,7 @@ class DetailActivity : AppCompatActivity() {
         viewModel.isFavorite.observe(this) { isFavorite ->
             binding.apply {
                 // Set the favorite state
+                favoriteButton.isChecked = isFavorite
             }
         }
         viewModel.detailData.observe(this) { detailData ->

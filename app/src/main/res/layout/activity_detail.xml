@@ -30,7 +30,7 @@
         android:id="@+id/favorite_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/fav_gray"
+        android:background="@drawable/favoritebutton"
         android:text=""
         android:textOff=""
         android:textOn=""

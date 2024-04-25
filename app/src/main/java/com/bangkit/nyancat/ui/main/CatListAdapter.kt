@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bangkit.nyancat.R
 import com.bangkit.nyancat.data.response.SearchCatResponse
+import com.bangkit.nyancat.database.Cat
 import com.bumptech.glide.Glide
 
 class CatListAdapter(private val context: Context, private val listCat: List<SearchCatResponse>) : RecyclerView.Adapter<CatListAdapter.ViewHolder>() {
@@ -44,6 +45,14 @@ class CatListAdapter(private val context: Context, private val listCat: List<Sea
     
     interface OnItemClickCallback {
         fun onItemClicked(catDetail: SearchCatResponse)
+    }
+
+    private fun SearchCatResponseToDatabaseMapping(searchCatResponse: SearchCatResponse): Cat{
+        return Cat(
+            name = searchCatResponse.name?: "",
+            id = searchCatResponse.id?: "",
+            avatar_url = "https://cdn2.thecatapi.com/images/${searchCatResponse.referenceImageId?: ""}.jpg"
+        )
     }
     
 }

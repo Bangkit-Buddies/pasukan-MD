@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Cat::class], version = 2)
+@Database(entities = [Cat::class], version = 1)
 abstract class CatDatabase: RoomDatabase() {
     abstract fun catDao(): CatDao
 
@@ -17,7 +17,8 @@ abstract class CatDatabase: RoomDatabase() {
         fun getDatabase(context: Context): CatDatabase?{
             if (INSTANCE==null){
                 synchronized(CatDatabase::class){
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, CatDatabase::class.java, "database-cat")
+                    INSTANCE = Room.databaseBuilder(context.applicationContext,
+                        CatDatabase::class.java, "database-cat")
                         .fallbackToDestructiveMigration()
                         .build()
                 }

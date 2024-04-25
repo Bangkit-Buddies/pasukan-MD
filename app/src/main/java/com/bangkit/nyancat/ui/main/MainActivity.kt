@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.nyancat.R
 import com.bangkit.nyancat.data.response.SearchCatResponse
 import com.bangkit.nyancat.databinding.ActivityMainBinding
+import com.bangkit.nyancat.ui.favorite.FavoriteListActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,8 +37,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 
                 R.id.menu_favourite_list -> {
-//                    val intent = Intent(this, FavouriteActivity::class.java)
-//                    startActivity(intent)
+                    val intent = Intent(this, FavoriteListActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 
