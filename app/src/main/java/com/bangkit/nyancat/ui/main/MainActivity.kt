@@ -16,6 +16,13 @@ import com.bangkit.nyancat.data.response.SearchCatResponse
 import com.bangkit.nyancat.databinding.ActivityMainBinding
 import com.bangkit.nyancat.ui.detail.DetailActivity
 import com.bangkit.nyancat.ui.favorite.FavoriteListActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ViewModelProvider
+import com.bangkit.nyancat.ui.settings.SettingsViewModel
+import com.bangkit.nyancat.ViewModelFactory
+import com.bangkit.nyancat.ui.settings.SettingsActivity
+import com.bangkit.nyancat.preferences.SettingPreferences
+import com.bangkit.nyancat.preferences.dataStore
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,8 +39,8 @@ class MainActivity : AppCompatActivity() {
         binding.appBar.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.menu_change_theme -> {
-//                    val intent = Intent(this, ChangeThemeActivity::class.java)
-//                    startActivity(intent)
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 
@@ -76,6 +83,19 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             })
+        }
+
+        // This code is to activate dark theme according to settings on app launch.
+        val pref = SettingPreferences.getInstance(application.dataStore)
+        val settingsViewModel = ViewModelProvider(this, ViewModelFactory(pref)).get(
+            SettingsViewModel::class.java
+        )
+        settingsViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
         
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
