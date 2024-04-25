@@ -83,8 +83,14 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
         fun deleteFavoriteCat(id: String){
        viewModelScope.launch {
            catDao?.deleteFavoriteCat(id)
+
        }
    }
+
+    fun checkCat(id: String) = viewModelScope.launch{
+        val isFavorite = catDao?.checkCat(id)?: 0>0
+        _isFavorite.value = isFavorite
+    }
 
     fun addFavoriteCat(name: String, id: String, avatar_url: String){
         viewModelScope.launch {

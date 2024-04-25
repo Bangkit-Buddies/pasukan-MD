@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import com.bangkit.nyancat.R
 import com.bangkit.nyancat.databinding.ActivityDetailBinding
 
@@ -18,7 +19,8 @@ class DetailActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<DetailViewModel>()
 
-//    private var catId: String? = null
+
+    private var isChecked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,38 +34,36 @@ class DetailActivity : AppCompatActivity() {
         }
 
         val catId = intent.getStringExtra(EXTRA_CAT_ID)
+        val name = intent.getStringExtra(EXTRA_CAT_NAME)
+        val avatar_url = intent.getStringExtra(EXTRA_CAT_AVATAR)
 
 
         if (catId != null) {
             viewModel.setDetailData(catId ?: "")
-           viewModel.getCatData(catId?: "")
-            binding.apply {
-                tbFavoriteButton.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if (isChecked){
-                        Log.d("DetailActivity", "Toggle button checked: $isChecked")
-                        viewModel.catData.observe(this@DetailActivity){ detailData ->
-                            detailData?.let {
-                                Log.e("DetailActivity", "Search data : $detailData")
-                                catId?.let{
-                                    viewModel.addFavoriteCat(name = detailData.name?: "", id = it, avatar_url = detailData.reference_image_id?:"" )
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        catId?.let {
-                            viewModel.deleteFavoriteCat(it)
-                        }
-                    }
 
-                }
-            }
         } else
         {
             Log.e("DetailActivity", "Tidak ada data")
         }
 
+        viewModel.isFavorite.observe(this, Observer { isFavorite ->
+            binding.tbFavoriteButton.isChecked = isFavorite
+        })
 
+        viewModel.checkCat(catId?:"")
+
+        binding.tbFavoriteButton.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked){
+                    Log.d("DetailActivity", "Toggle button checked: $isChecked")
+                    viewModel.addFavoriteCat(name = name?: "", id = catId?:"", avatar_url = "https://cdn2.thecatapi.com/images/${avatar_url?: ""}.jpg")
+                }
+                else {
+                    catId?.let {
+                        viewModel.deleteFavoriteCat(it)
+                    }
+                }
+
+        }
         initView()
         observeData()
 
@@ -104,5 +104,7 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_CAT_ID = "extra_cat_id"
+        const val EXTRA_CAT_NAME = "extra_cat_name"
+        const val EXTRA_CAT_AVATAR = "extra_cat_avatar"
     }
 }

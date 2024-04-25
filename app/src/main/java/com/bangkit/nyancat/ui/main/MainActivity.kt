@@ -65,8 +65,13 @@ class MainActivity : AppCompatActivity() {
             binding.rvCat.adapter = adapter
             adapter.setOnItemClickCallback(object: CatListAdapter.OnItemClickCallback{
                 override fun onItemClicked(catDetail: SearchCatResponse) {
-                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.EXTRA_CAT_ID, catDetail.id)
+                    Intent(this@MainActivity, DetailActivity::class.java). also{
+                        it.putExtra(DetailActivity.EXTRA_CAT_ID, catDetail.id)
+                        it.putExtra(DetailActivity.EXTRA_CAT_NAME, catDetail.name)
+                        it.putExtra(DetailActivity.EXTRA_CAT_AVATAR, catDetail.referenceImageId)
+                        startActivity(it)
+                    }
+
                     Log.d("DetailActivity", "ADA DATA ${catDetail.id}")
                     startActivity(intent)
                 }

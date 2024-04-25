@@ -15,7 +15,7 @@ interface CatDao {
     fun getFavoriteCat(): LiveData<List<Cat>>
 
     @Query("SELECT count(*) FROM favorite_cat WHERE favorite_cat.id = :id")
-    suspend fun checkUser(id: String): Int
+    suspend fun checkCat(id: String): Int
 
     @Query("DELETE FROM favorite_cat WHERE favorite_cat.id = :id")
     suspend fun deleteFavoriteCat(id: String): Int
