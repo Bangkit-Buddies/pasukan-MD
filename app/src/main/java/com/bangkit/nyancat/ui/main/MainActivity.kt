@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.nyancat.R
 import com.bangkit.nyancat.data.response.SearchCatResponse
 import com.bangkit.nyancat.databinding.ActivityMainBinding
+import com.bangkit.nyancat.ui.detail.DetailActivity
 import com.bangkit.nyancat.ui.favorite.FavoriteListActivity
 
 class MainActivity : AppCompatActivity() {
@@ -64,7 +65,10 @@ class MainActivity : AppCompatActivity() {
             binding.rvCat.adapter = adapter
             adapter.setOnItemClickCallback(object: CatListAdapter.OnItemClickCallback{
                 override fun onItemClicked(catDetail: SearchCatResponse) {
-                    TODO("Not yet implemented")
+                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                    intent.putExtra(DetailActivity.EXTRA_CAT_ID, catDetail.id)
+                    Log.d("DetailActivity", "ADA DATA ${catDetail.id}")
+                    startActivity(intent)
                 }
             })
         }
