@@ -47,12 +47,6 @@ class CatListAdapter(private val context: Context, private val listCat: List<Sea
         fun onItemClicked(catDetail: SearchCatResponse)
     }
 
-    private fun SearchCatResponseToDatabaseMapping(searchCatResponse: SearchCatResponse): Cat{
-        return Cat(
-            name = searchCatResponse.name?: "",
-            id = searchCatResponse.id?: "",
-            avatar_url = "https://cdn2.thecatapi.com/images/${searchCatResponse.referenceImageId?: ""}.jpg"
-        )
-    }
+
     
 }

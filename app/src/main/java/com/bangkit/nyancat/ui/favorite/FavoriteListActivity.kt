@@ -1,6 +1,8 @@
 package com.bangkit.nyancat.ui.favorite
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -10,8 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.nyancat.R
+import com.bangkit.nyancat.database.Cat
 import com.bangkit.nyancat.database.CatModel
 import com.bangkit.nyancat.databinding.ActivityFavoriteListBinding
+import com.bangkit.nyancat.ui.detail.DetailActivity
 import com.bangkit.nyancat.ui.main.CatListAdapter
 
 class FavoriteListActivity : AppCompatActivity() {
@@ -42,6 +46,18 @@ class FavoriteListActivity : AppCompatActivity() {
         catModel.getFavoriteCat()?.observe(this, Observer { listCat ->
             adapter = FavoriteListAdapter(this, listCat)
             rvFavCat.adapter = adapter
+            adapter.setOnItemClickCallback(object : FavoriteListAdapter.OnItemClickCallback {
+                override fun onItemClicked(cat: Cat) {
+                    Log.d("FavoriteListAdapter", "Item clicked: ${cat.name}")
+                    Intent(this@FavoriteListActivity, DetailActivity::class.java).apply {
+                        putExtra(DetailActivity.EXTRA_CAT_ID, cat.id)
+                        putExtra(DetailActivity.EXTRA_CAT_NAME, cat.name)
+                        putExtra(DetailActivity.EXTRA_CAT_AVATAR, cat.avatar_url)
+                        startActivity(this)
+                    }
+                }
+
+            })
 
 
         })

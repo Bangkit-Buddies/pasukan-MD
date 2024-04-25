@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 class FavoriteListAdapter(private val context: Context, private var listCat: List<Cat>) :
 RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>(){
 
+    private lateinit var onItemClickCallback: OnItemClickCallback
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         private val imageView: ImageView = itemView.findViewById(R.id.imageViewCatCard)
         private val textView: TextView = itemView.findViewById(R.id.tvCatCard)
@@ -35,6 +36,17 @@ RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>(){
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentCat = listCat[position]
         holder.bind(currentCat)
+        holder.itemView.setOnClickListener {
+            onItemClickCallback?.onItemClicked(currentCat)
+        }
+
+    }
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(cat: Cat)
     }
 
     override fun getItemCount(): Int {
