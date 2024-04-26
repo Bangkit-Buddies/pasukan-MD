@@ -6,4 +6,6 @@
     <string name="queryHint">Enter cat name ...</string>
     <string name="cat_picture">Cat Picture</string>
     <string name="cat_name">Cat Name</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

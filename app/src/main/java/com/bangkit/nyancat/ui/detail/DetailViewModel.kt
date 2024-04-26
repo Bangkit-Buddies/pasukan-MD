@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.bangkit.nyancat.data.ApiConfig
 import com.bangkit.nyancat.data.response.CatResponse
 import com.bangkit.nyancat.data.response.DetailCatResponse
+import com.bangkit.nyancat.data.response.DetailDescriptionCatResponse
+import com.bangkit.nyancat.data.response.DetailProfileCatResponse
 import com.bangkit.nyancat.data.response.SearchCatResponse
 import com.bangkit.nyancat.database.Cat
 import com.bangkit.nyancat.database.CatDao
@@ -30,6 +32,20 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
     val isError: LiveData<Boolean> = _isError
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean> = _isFavorite
+
+    private val _descriptionData = MutableLiveData<DetailDescriptionCatResponse>()
+    val descriptionData: LiveData<DetailDescriptionCatResponse> = _descriptionData
+    private val _isDescriptionLoading = MutableLiveData<Boolean>()
+    val isDescriptionLoading: LiveData<Boolean> = _isDescriptionLoading
+    private val _isDescriptionError = MutableLiveData<Boolean>()
+    val isDescriptionError: LiveData<Boolean> = _isDescriptionError
+
+    private val _profileData = MutableLiveData<DetailProfileCatResponse>()
+    val profileData: LiveData<DetailProfileCatResponse> = _profileData
+    private val _isProfileLoading = MutableLiveData<Boolean>()
+    val isProfileLoading: LiveData<Boolean> = _isProfileLoading
+    private val _isProfileError = MutableLiveData<Boolean>()
+    val isProfileError: LiveData<Boolean> = _isProfileError
 
     private val catDao: CatDao?
     private val catDatabase: CatDatabase?
@@ -104,6 +120,52 @@ class DetailViewModel(application: Application) : AndroidViewModel(application) 
 
         }
     }
+
+    fun setDetailDescriptionData(catId: String) {
+        // Set the data from the API
+        _isDescriptionLoading.value = true
+        val client = ApiConfig.getApiService().getDetailDescriptionCat(catId)
+        client.enqueue(object : Callback<DetailDescriptionCatResponse> {
+            override fun onResponse(call: Call<DetailDescriptionCatResponse>, response: Response<DetailDescriptionCatResponse>) {
+                _isDescriptionLoading.value = false
+                if (response.isSuccessful) {
+                    _descriptionData.value = response.body()
+                    _isDescriptionError.value = false
+                } else {
+                    _isDescriptionError.value = true
+                }
+            }
+
+            override fun onFailure(call: Call<DetailDescriptionCatResponse>, t: Throwable) {
+                _isDescriptionLoading.value = false
+                _isDescriptionError.value = true
+            }
+        })
+    }
+
+    fun setDetailProfileData(catId: String) {
+        // Set the data from the API
+        _isProfileLoading.value = true
+        val client = ApiConfig.getApiService().getDetailProfileCat(catId)
+        client.enqueue(object : Callback<DetailProfileCatResponse> {
+            override fun onResponse(call: Call<DetailProfileCatResponse>, response: Response<DetailProfileCatResponse>) {
+                _isProfileLoading.value = false
+                if (response.isSuccessful) {
+                    _profileData.value = response.body()
+                    _isProfileError.value = false
+                } else {
+                    _isProfileError.value = true
+                }
+            }
+
+            override fun onFailure(call: Call<DetailProfileCatResponse>, t: Throwable) {
+                _isProfileLoading.value = false
+                _isProfileError.value = true
+            }
+        })
+    }
+
+
 
 
     }

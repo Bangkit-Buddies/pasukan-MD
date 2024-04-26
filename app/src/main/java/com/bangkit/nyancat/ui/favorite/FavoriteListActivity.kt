@@ -39,6 +39,10 @@ class FavoriteListActivity : AppCompatActivity() {
             insets
         }
 
+        binding.tbFavorite.setNavigationOnClickListener {
+            this@FavoriteListActivity.onBackPressedDispatcher.onBackPressed()
+        }
+
 
         rvFavCat = binding.rvFavCat
         rvFavCat.layoutManager = LinearLayoutManager(this)
