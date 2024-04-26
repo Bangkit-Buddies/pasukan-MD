@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.bangkit.nyancat" />
+                  <option name="appId" value="com.darskhandev.urail.android" />
                 </ConnectionSetting>
               </option>
               <option name="failureTypes">

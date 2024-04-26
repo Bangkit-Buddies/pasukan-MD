@@ -3,24 +3,25 @@ package com.bangkit.nyancat.ui.detail
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.bangkit.nyancat.R
 import com.bangkit.nyancat.databinding.ActivityDetailBinding
+import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailBinding
 
     private val viewModel by viewModels<DetailViewModel>()
-
-
-    private var isChecked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +40,9 @@ class DetailActivity : AppCompatActivity() {
 
 
         if (catId != null) {
-            viewModel.setDetailData(catId ?: "")
+            viewModel.setDetailData(avatar_url ?: "")
 
-        } else
-        {
+        } else {
             Log.e("DetailActivity", "Tidak ada data")
         }
 
@@ -50,61 +50,86 @@ class DetailActivity : AppCompatActivity() {
             binding.tbFavoriteButton.isChecked = isFavorite
         })
 
-        viewModel.checkCat(catId?:"")
+        viewModel.checkCat(catId ?: "")
 
         binding.tbFavoriteButton.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked){
-                    Log.d("DetailActivity", "Toggle button checked: $isChecked")
-                    viewModel.addFavoriteCat(name = name?: "", id = catId?:"", avatar_url = "https://cdn2.thecatapi.com/images/${avatar_url?: ""}.jpg")
+            if (isChecked) {
+                Log.d("DetailActivity", "Toggle button checked: $isChecked")
+                viewModel.addFavoriteCat(
+                    name = name ?: "",
+                    id = catId ?: "",
+                    avatar_url = avatar_url ?: ""
+                )
+                Toast.makeText(this, "Added to Favorite! its so cute :)", Toast.LENGTH_SHORT).show()
+            } else {
+                catId?.let {
+                    viewModel.deleteFavoriteCat(it)
                 }
-                else {
-                    catId?.let {
-                        viewModel.deleteFavoriteCat(it)
-                    }
-                }
-
-        }
-        initView()
-        observeData()
-
-    }
-
-
-    private fun initView() {
-        binding.apply {
-            tbDetail.setNavigationOnClickListener {
-                OnBackPressedDispatcher().onBackPressed()
-
+                Toast.makeText(this, "Deleted from Favorite :(", Toast.LENGTH_SHORT).show()
             }
 
         }
+
+        setTabSection()
+        initListener()
+        observeData()
     }
 
     private fun observeData() {
         viewModel.isError.observe(this) {
-            binding.tvError.visibility = if (it) View.VISIBLE else View.GONE
+            if (it) {
+                binding.tvError.visibility =  View.VISIBLE
+                binding.viewDetailContent.isVisible = false
+            } else {
+                binding.tvError.visibility =  View.GONE
+                binding.viewDetailContent.isVisible = true
+            }
         }
         viewModel.isLoading.observe(this) {
-            binding.pbDetail.visibility = if (it) View.VISIBLE else View.GONE
-        }
-        viewModel.isFavorite.observe(this) { isFavorite ->
-            binding.apply {
-                // Set the favorite state
-//                favoriteButton.isChecked = isFavorite
+            if (it) {
+                binding.pbDetail.visibility = View.VISIBLE
+                binding.viewDetailContent.isVisible = false
+            } else {
+                binding.pbDetail.visibility = View.GONE
+                binding.viewDetailContent.isVisible = true
             }
         }
+        viewModel.isFavorite.observe(this) { binding.tbFavoriteButton.isChecked = it }
         viewModel.detailData.observe(this) { detailData ->
-
             binding.apply {
-
-                // Set the data to the view
+                binding.tbDetail.title = detailData.breeds?.first()?.name ?: "Detail Activity"
+                Glide.with(this@DetailActivity)
+                    .load(detailData.url)
+                    .into(ivCatDetail)
             }
         }
+    }
+
+    private fun initListener() {
+        binding.apply {
+            tbDetail.setNavigationOnClickListener {
+                this@DetailActivity.onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+    private fun setTabSection() {
+        val tabPagerAdapter = TabAdapter(this)
+        binding.viewPager2.adapter = tabPagerAdapter
+        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
+            tab.text = TAB_TITLES[position]
+        }.attach()
+
     }
 
     companion object {
         const val EXTRA_CAT_ID = "extra_cat_id"
         const val EXTRA_CAT_NAME = "extra_cat_name"
         const val EXTRA_CAT_AVATAR = "extra_cat_avatar"
+
+        private val TAB_TITLES = arrayOf(
+            "Profile",
+            "Description"
+        )
     }
 }
