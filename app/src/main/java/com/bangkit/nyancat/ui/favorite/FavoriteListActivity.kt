@@ -52,7 +52,7 @@ class FavoriteListActivity : AppCompatActivity() {
             rvFavCat.adapter = adapter
             adapter.setOnItemClickCallback(object : FavoriteListAdapter.OnItemClickCallback {
                 override fun onItemClicked(cat: Cat) {
-                    Log.d("FavoriteListAdapter", "Item clicked: ${cat.name}")
+                    Log.d("FavoriteListAdapter", "Item clicked: ${cat.name}, ${cat.avatar_url}")
                     Intent(this@FavoriteListActivity, DetailActivity::class.java).apply {
                         putExtra(DetailActivity.EXTRA_CAT_ID, cat.id)
                         putExtra(DetailActivity.EXTRA_CAT_NAME, cat.name)

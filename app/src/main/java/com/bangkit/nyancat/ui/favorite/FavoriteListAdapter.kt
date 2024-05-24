@@ -21,7 +21,7 @@ RecyclerView.Adapter<FavoriteListAdapter.ViewHolder>(){
 
         fun bind(cat: Cat){
             Glide.with(context)
-                .load(cat.avatar_url)
+                .load("https://cdn2.thecatapi.com/images/"+ cat.avatar_url + ".jpg")
                 .placeholder(R.drawable.cat_silhoutte)
                 .into(imageView)
             textView.text = cat.name
